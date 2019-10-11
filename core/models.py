@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 
 class Estado(models.Model):
@@ -22,11 +23,9 @@ class Pessoa(models.Model):
         abstract = True
 
     nome = models.CharField(max_length=255, blank=False, null=False)
-    contato = models.CharField(max_length=100, blank=False, null=False)
 
     def __str__(self):
         return self.nome
-
 
 
 class Cliente(Pessoa):
@@ -38,6 +37,7 @@ class Cliente(Pessoa):
 class Fornecedor(Pessoa):
     nome_fantasia = models.CharField(max_length=255, blank=False, null=False)
     cnpj = models.CharField(max_length=14, blank=False, null=False)
+
 
 class Endereco(models.Model):
     rua = models.CharField(max_length=100)
@@ -66,7 +66,6 @@ class Telefone(models.Model):
         return self.numero
 
 
-
 class ProdutoAbstrato(models.Model):
     class Meta:
         abstract = True
@@ -87,3 +86,34 @@ class Produto(ProdutoAbstrato):
 
 class Servico(ProdutoAbstrato):
     pass
+
+
+class Especie(models.Model):
+    nome = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nome
+
+
+class Raca(models.Model):
+    nome = models.CharField(max_length=255)
+    especie = models.ForeignKey(Especie, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nome
+
+
+class Animal(models.Model):
+    nome = models.CharField(max_length=255)
+    cor = models.CharField(max_length=50)
+    data_nascimento = models.DateField()
+    raca = models.ForeignKey(Raca, on_delete=models.CASCADE)
+    dono = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    sexo = models.CharField(max_length=5,
+                            choices=[('M', 'Macho'), ('F', 'Fêmea')])
+
+    def idade(self):
+        return datetime.now().date().year - self.data_nascimento.year
+
+    def __str__(self):
+        return '%s / %s' % (self.nome, self.raca.nome)
