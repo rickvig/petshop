@@ -74,6 +74,9 @@ class ProdutoAbstrato(models.Model):
     status = models.BooleanField()
     valor_venda = models.DecimalField(max_digits=5, decimal_places=2)
 
+    def __str__(self):
+        return self.descricao
+
 
 class Produto(ProdutoAbstrato):
     valor_compra = models.DecimalField(max_digits=5, decimal_places=2)
