@@ -9,10 +9,17 @@ class Venda(models.Model):
         max_digits=5, decimal_places=2, blank=True, null=True)
 
     def itens_venda(self):
-        pass
+        return list(self.itensdevenda_set.all())
+    
+    def save(self, *args, **kwargs):
+        self.valor_final = 0
+        for item in self.itensdevenda_set.all():
+            self.valor_final += item.valor_total
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.cliente.__str__() + " - " + str(self.valor_final)
+        return 'Venda: %s' % str(self.id)
 
 
 class ItensDeVenda(models.Model):
@@ -24,10 +31,9 @@ class ItensDeVenda(models.Model):
 
     def save(self, *args, **kwargs):
         self.valor_total = self.quantidade * self.produto.valor_venda
-        print('valor_total', self.valor_total)
-
-
         super().save(*args, **kwargs)
+        
+        self.venda.save()
 
     def __str__(self):
         return self.produto.__str__() + " - " + str(self.quantidade)

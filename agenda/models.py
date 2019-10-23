@@ -6,8 +6,12 @@ from core.models import *
 class Agenda(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
 
+    def ordens_servico(self):
+            return list(self.ordemservicointerna_set.all()) + list(self.ordemservicoexterna_set.all())
+
     def __str__(self):
         return self.cliente.__str__()
+
 
 class OrdemServicoAbstrata(models.Model):
     class Meta:
@@ -20,7 +24,7 @@ class OrdemServicoAbstrata(models.Model):
 
     def __str__(self):
         return self.servico.__str__() + ' - ' + str(self.data_horario_inicial) + ' - ' + str(self.data_horario_final)
- 
+
 
 class OrdemServicoInterna(OrdemServicoAbstrata):
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE)

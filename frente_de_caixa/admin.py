@@ -4,7 +4,7 @@ from .models import Venda, ItensDeVenda
 
 class VendaAdmin(admin.ModelAdmin):
     fields = ['cliente']
-    list_display = ('cliente', 'itens_venda', 'valor_final')
+    list_display = ('id', 'cliente', 'itens_venda', 'valor_final')
 
 
 class ItensDeVendaAdmin(admin.ModelAdmin):
