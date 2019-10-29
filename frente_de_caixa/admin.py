@@ -9,7 +9,7 @@ class VendaAdmin(admin.ModelAdmin):
 
 class ItensDeVendaAdmin(admin.ModelAdmin):
     fields = ['venda', 'produto', 'servico', 'quantidade']
-    list_display = ('venda', 'produto', 'quantidade', 'valor_total')
+    list_display = ('id', 'venda', 'produto', 'quantidade', 'valor_total')
 
 
 admin.site.register(Venda, VendaAdmin)
