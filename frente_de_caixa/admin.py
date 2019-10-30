@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Venda, ItensDeVenda
+from .models import Venda, ItemDeVenda
 
 
 class VendaAdmin(admin.ModelAdmin):
@@ -13,4 +13,4 @@ class ItensDeVendaAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Venda, VendaAdmin)
-admin.site.register(ItensDeVenda, ItensDeVendaAdmin )
+admin.site.register(ItemDeVenda, ItensDeVendaAdmin )

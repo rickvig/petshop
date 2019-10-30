@@ -2,8 +2,8 @@ from django.contrib import admin
 from .models import *
 
 class ProdutoAdmin(admin.ModelAdmin):
-    fields = ('descricao', 'valor_venda', 'valor_compra', 'codigo_barras', 'quantidade_estoque', 'unidade_medida', 'status')
-    list_display = ('descricao', 'quantidade_estoque', 'valor_venda', 'unidade_medida', 'status')
+    fields = ('descricao', 'valor_venda', 'valor_compra', 'codigo_barras', 'unidade_medida', 'status')
+    list_display = ('descricao', 'valor_venda', 'unidade_medida', 'status')
 
 class AnimalAdmin(admin.ModelAdmin):
     list_display = ('nome', 'raca', 'sexo', 'cor', 'idade', 'dono')

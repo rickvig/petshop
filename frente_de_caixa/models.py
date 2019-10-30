@@ -10,7 +10,7 @@ class Venda(models.Model):
 
     def itens_venda(self):
         itens_str = ''
-        for item in list(self.itensdevenda_set.all()):
+        for item in list(self.itemdevenda_set.all()):
             itens_str += item.__str__() + '\n'
 
         print(itens_str)
@@ -18,16 +18,18 @@ class Venda(models.Model):
     
     def save(self, *args, **kwargs):
         self.valor_final = 0
-        for item in self.itensdevenda_set.all():
+        super().save(*args, **kwargs)
+
+    def calcula_valor_final(self):
+        for item in list(self.itemdevenda_set.all()):
             self.valor_final += item.valor_total
 
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return 'Venda: %i' % self.id
 
 
-class ItensDeVenda(models.Model):
+class ItemDeVenda(models.Model):
     venda = models.ForeignKey(Venda, on_delete=models.CASCADE)
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, blank=True, null=True)
     servico = models.ForeignKey(Servico, on_delete=models.CASCADE, blank=True, null=True)
