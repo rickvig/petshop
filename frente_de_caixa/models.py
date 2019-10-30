@@ -13,17 +13,15 @@ class Venda(models.Model):
         for item in list(self.itemdevenda_set.all()):
             itens_str += item.__str__() + '\n'
 
-        print(itens_str)
-        return itens_str
-    
-    def save(self, *args, **kwargs):
-        self.valor_final = 0
-        super().save(*args, **kwargs)
+        return itens_str   
 
     def calcula_valor_final(self):
         for item in list(self.itemdevenda_set.all()):
             self.valor_final += item.valor_total
 
+    def save(self, *args, **kwargs):
+        self.calcula_valor_final()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return 'Venda: %i' % self.id
@@ -42,7 +40,6 @@ class ItemDeVenda(models.Model):
     def save(self, *args, **kwargs):
         self.calcula_valor_total()
         super().save(*args, **kwargs)
-        
         self.venda.save()
 
     def __str__(self):
