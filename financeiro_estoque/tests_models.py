@@ -1,9 +1,9 @@
 from django.test import TestCase
 from datetime import datetime
+from decimal import Decimal
 from .models import FluxoDeCaixa
 from core.models import Produto, Cliente
 from frente_de_caixa.models import ItemDeVenda, Venda
-from decimal import *
 
 class TestModelFinanceiroEstoque(TestCase):
     
@@ -33,7 +33,8 @@ class TestModelFinanceiroEstoque(TestCase):
 
         self.assertEqual(252.50, fluxo_de_caixa.valor_fechamento)
         self.assertEqual(1752.50, fluxo_de_caixa.valor_final)
-        self.assertEqual(datetime.now().date(), fluxo_de_caixa.data_hora_fechamento.date())
+        self.assertEqual(datetime.now().date(), 
+                        fluxo_de_caixa.data_hora_fechamento.date())
 
 
     def cria_venda(self, valor):

@@ -1,7 +1,7 @@
 from django.db import models
+from datetime import datetime
 from core.models import Produto
 from frente_de_caixa.models import Venda
-from datetime import datetime
 
 class Estoque(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
