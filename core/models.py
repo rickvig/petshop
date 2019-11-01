@@ -79,8 +79,8 @@ class ProdutoAbstrato(models.Model):
 
 
 class Produto(ProdutoAbstrato):
-    valor_compra = models.DecimalField(max_digits=5, decimal_places=2, null=True)
-    valor_venda = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    valor_compra = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    valor_venda = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     codigo_barras = models.CharField(max_length=255, blank=False, null=True)
     unidade_medida = models.CharField(max_length=5,
                                       choices=[('kg', 'Kg'), ('un', 'Un'), ('pct', 'Pct')],

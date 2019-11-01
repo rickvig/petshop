@@ -6,7 +6,7 @@ from core.models import *
 class Venda(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     valor_final = models.DecimalField(
-        max_digits=5, decimal_places=2, blank=True, null=True)
+        max_digits=5, decimal_places=2, blank=True, null=True, default=0)
 
     def itens_venda(self):
         itens_str = ''
@@ -22,7 +22,7 @@ class Venda(models.Model):
     def save(self, *args, **kwargs):
         self.calcula_valor_final()
         super().save(*args, **kwargs)
-
+    
     def __str__(self):
         return 'Venda: %i' % self.id
 
@@ -40,7 +40,6 @@ class ItemDeVenda(models.Model):
     def save(self, *args, **kwargs):
         self.calcula_valor_total()
         super().save(*args, **kwargs)
-        self.venda.save()
 
     def __str__(self):
         return "Qnt: %d. %s - %s" % (self.quantidade, self.produto.unidade_medida, self.produto.__str__())

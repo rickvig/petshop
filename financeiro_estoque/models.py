@@ -1,6 +1,7 @@
 from django.db import models
 from core.models import Produto
 from frente_de_caixa.models import Venda
+from datetime import datetime
 
 class Estoque(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
@@ -16,12 +17,22 @@ class Estoque(models.Model):
 class FluxoDeCaixa(models.Model):
     vendas = models.ManyToManyField(Venda)
     data_hora_abertura = models.DateTimeField()
-    data_hora_fechamento = models.DateTimeField()
+    data_hora_fechamento = models.DateTimeField(null=True)
     valor_abertura = models.DecimalField(
-        max_digits=5, decimal_places=2, blank=True, null=True)
+        max_digits=10, decimal_places=2, blank=True, null=True, default=0)
     valor_fechamento = models.DecimalField(
-        max_digits=5, decimal_places=2, blank=True, null=True)
+        max_digits=10, decimal_places=2, blank=True, null=True, default=0)
     valor_final = models.DecimalField(
-        max_digits=5, decimal_places=2, blank=True, null=True)
+        max_digits=10, decimal_places=2, blank=True, null=True, default=0)
 
+    def atualiza_valor_fechamento(self):
+        valor_aux = 0
+        for venda in self.vendas.all():
+            valor_aux += venda.valor_final
+
+        self.valor_fechamento = valor_aux
+
+    def fecha_caixa(self):
+        self.valor_final = self.valor_abertura + self.valor_fechamento
+        self.data_hora_fechamento = datetime.now()
     
