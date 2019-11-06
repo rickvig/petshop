@@ -107,12 +107,12 @@ class Raca(models.Model):
 
 class Animal(models.Model):
     nome = models.CharField(max_length=255)
-    cor = models.CharField(max_length=50)
-    data_nascimento = models.DateField()
+    cor = models.CharField(max_length=50, null=True)
+    data_nascimento = models.DateField(null=True)
     raca = models.ForeignKey(Raca, on_delete=models.CASCADE)
     dono = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     sexo = models.CharField(max_length=5,
-                            choices=[('M', 'Macho'), ('F', 'Fêmea')])
+                            choices=[('M', 'Macho'), ('F', 'Fêmea')], null=True)
 
     def idade(self):
         return datetime.now().date().year - self.data_nascimento.year
