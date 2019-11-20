@@ -19,7 +19,7 @@ class TestMovimentacao(TestCase):
 
     def test_calcula_valor_total_do_item_venda(self):
         item_de_venda = ItemDeVenda()
-        item_de_venda.produto = self.cria_produto(5.00, 0.00)
+        item_de_venda.produto = self.cria_produto(valor_venda=5.00, valor_compra=0.00)
         item_de_venda.quantidade = 15
         item_de_venda.calcula_valor_total()
 
@@ -133,7 +133,7 @@ class TestMovimentacao(TestCase):
         self.assertEqual(datetime.now().date(),
                          fluxo_de_caixa.data_hora_fechamento.date())
 
-    def test_estoque_para_compra(self):
+    def test_quantidade_em_estoque_para_compra_de_produto(self):
         produto = self.cria_produto(5.00, 1.50)
 
         estoque = Estoque(produto=produto, quantidade=50)
@@ -153,7 +153,7 @@ class TestMovimentacao(TestCase):
         self.assertEqual(100, estoque.quantidade)
 
     
-    def test_estoque_para_venda(self):
+    def test_quantidade_em_estoque_para_venda_de_produto(self):
         produto = self.cria_produto(5.00, 1.50)
 
         estoque = Estoque(produto=produto, quantidade=50)
