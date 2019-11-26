@@ -106,19 +106,31 @@ class TestMovimentacao(TestCase):
         fluxo_de_caixa.valor_abertura = Decimal(1500.00)
         fluxo_de_caixa.save()
 
-        produtos = [
-            self.cria_produto(15.00, 0.00),
-            self.cria_produto(3.50, 0.00)
-        ]
-        os = self.cria_order_servico_interna(Decimal(100.00), produtos)
+        produto_shampo = self.cria_produto(15.00, 0.00)
+        produto_condicionador = self.cria_produto(3.50, 0.00)
 
-        fluxo_de_caixa.movimentacoes.add(os)
+        estoque_shampo = Estoque()
+        estoque_shampo.produto = produto_shampo
+        estoque_shampo.quantidade = 20
+        estoque_shampo.save()
+        
+        estoque_condicionador = Estoque()
+        estoque_condicionador.produto = produto_condicionador
+        estoque_condicionador.quantidade = 5
+        estoque_condicionador.save()
+
+        produtos = [ produto_shampo, produto_condicionador ]
+
+
+        os_interna1 = self.cria_order_servico_interna(Decimal(100.00), produtos)
+
+        fluxo_de_caixa.movimentacoes.add(os_interna1)
         fluxo_de_caixa.atualiza()
         self.assertEqual(Decimal(118.50), fluxo_de_caixa.valor_em_fluxo)
 
-        os = self.cria_order_servico_interna(Decimal(75.00), [])
+        os_interna2 = self.cria_order_servico_interna(Decimal(75.00), [])
 
-        fluxo_de_caixa.movimentacoes.add(os)
+        fluxo_de_caixa.movimentacoes.add(os_interna2)
         fluxo_de_caixa.atualiza()
         self.assertEqual(Decimal(193.50), fluxo_de_caixa.valor_em_fluxo)
 
@@ -129,6 +141,18 @@ class TestMovimentacao(TestCase):
         self.assertEqual(Decimal(218.50), fluxo_de_caixa.valor_em_fluxo)
 
         fluxo_de_caixa.fecha_caixa()
+
+        estoque_shampo.movimentacoes.add(os_interna1)
+        estoque_shampo.movimentacoes.add(os_interna2)
+        estoque_shampo.atualiza()
+
+        estoque_condicionador.movimentacoes.add(os_interna1)
+        estoque_condicionador.movimentacoes.add(os_interna2)
+        estoque_condicionador.atualiza()
+
+        self.assertEqual(19, estoque_shampo.quantidade)
+        self.assertEqual(4, estoque_condicionador.quantidade)
+
         self.assertEqual(1718.50, fluxo_de_caixa.valor_final)
         self.assertEqual(datetime.now().date(),
                          fluxo_de_caixa.data_hora_fechamento.date())

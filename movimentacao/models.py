@@ -179,7 +179,9 @@ class Estoque(models.Model):
                         calculo += item.quantidade
             
             if type(movimentacao) == OrdemServicoInterna:
-                calculo += movimentacao.valor
+                for produto in movimentacao.produtos.all():
+                    if produto == self.produto:
+                        calculo -= 1
             
         self.quantidade += calculo
 
